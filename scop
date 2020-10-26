@@ -1,0 +1,44 @@
+## The purpose of the following two functions is to calculate the inverse of a given 
+## matrix and then to cache the result of that calculations to prevent prevent recalucaltion  
+
+## This function caches the calculation of inverse of the matrix 
+
+makeCacheMatrix <- function(x = matrix()) {
+  i <- NULL
+  set <- function(y) {
+    x <<- y
+    i <<- NULL
+  }
+  get <- function() x
+  setInv <- function(inv) i <<- inv
+  getInv <- function() i
+  list(set = set, get = get,
+       setInv = setInv,
+       getInv = getInv)
+}
+
+
+## This function checks if the inverse of a matrix is calculated. if its, it uses
+## the results in the cache else it calculates the inverse of a matrix
+
+cacheSolve <- function(x, ...) {
+        ## Return a matrix that is the inverse of 'x'
+  i <- x$getInv()
+  if(!is.null(i)) {
+    message("getting cached data")
+    return(i)
+  }
+  data <- x$get()
+  i <- solve(data)
+  x$setInv(i)
+  i
+}
+
+a <- c(3, 2, 8) 
+b <- c(6, 3, 2) 
+c <- c(5, 2, 4) 
+
+# Bind the 3 matrices row-wise  
+A <- rbind(a, b, c) 
+
+cacheSolve(makeCacheMatrix(A))
